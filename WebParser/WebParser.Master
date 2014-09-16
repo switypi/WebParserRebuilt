@@ -1,0 +1,55 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="WebParser.master.cs" Inherits="WebParser.WebParser" %>
+
+<%@ Register TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
+<link href="Style.css" rel="stylesheet" />
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <ajaxToolkit:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
+        </ajaxToolkit:ToolkitScriptManager>
+        <table border="0" style="width: 100%">
+            <tr>
+                <td style="float: right; width: 100%;">
+                    <asp:Panel HorizontalAlign="Right" ID="pnlUserInfo" runat="server">
+                        <asp:Label   CssClass="label"  Font-Size="16" ID="lblLoginName"  runat="server"  />
+                        <asp:HyperLink ID="hypLogOut" Visible="false" runat="server" NavigateUrl="~/LogOut.aspx" Text="  Log Out"></asp:HyperLink>
+                    </asp:Panel>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="MenuTd">
+                    <div style="float: right; margin-right: 10%;">
+                        <asp:Menu ID="menuMaster" runat="server" CssClass="Menu" Orientation="Horizontal">
+                            <Items>
+                                <asp:MenuItem Text="Admin" NavigateUrl="~/Admin.aspx"></asp:MenuItem>
+                                <asp:MenuItem Text="Scan" NavigateUrl="~/ScanLoad.aspx"></asp:MenuItem>
+                                <asp:MenuItem Text="Reports" NavigateUrl="~/Reports.aspx"></asp:MenuItem>
+                                 <asp:MenuItem  Text="Register User" NavigateUrl="~/Register.aspx"></asp:MenuItem>
+                            </Items>
+                        </asp:Menu>
+                        
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="MainBody">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+</body>
+</html>
