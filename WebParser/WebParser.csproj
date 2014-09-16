@@ -85,8 +85,10 @@
     <Content Include="Register.aspx" />
     <Content Include="Reports.aspx" />
     <Content Include="ScanLoad.aspx" />
-    <Content Include="Style.css" />
-    <Content Include="Web.config" />
+    <Content Include="Style\Style.css" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin.aspx.cs">
@@ -143,6 +145,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\Suby.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -170,7 +173,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>1482</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:3736/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

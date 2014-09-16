@@ -1,0 +1,145 @@
+﻿body {
+    background-color: wheat;
+}
+
+.MainBody {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 100%;
+}
+
+.MenuTd {
+    border-bottom: solid 3px #000;
+}
+
+.login {
+    display: block;
+    font-size: .85em;
+    margin: 0 0 10px;
+    text-align: right;
+}
+
+.panel {
+    height: 100%;
+    margin-top: 50px;
+}
+
+.label {
+    background: none;
+    margin-right: 30px;
+    font-family: 'serif';
+    text-align: left;
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+    background-color: #d3dce0;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 600;
+    padding: 7px;
+    margin-right: 8px;
+    width: auto;
+}
+
+.txtBox {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 1.2em;
+    margin: 5px 0 6px 0;
+    padding: 5px;
+    width: 300px;
+    font-family: inherit;
+}
+
+.Grid {
+    background-color: #fff;
+    margin: 5px 0 10px 0;
+    border: solid 1px #525252;
+    border-collapse: collapse;
+    font-family: Calibri;
+    color: #474747;
+}
+
+    .Grid td {
+        padding: 2px;
+        border: solid 1px #c1c1c1;
+       
+    }
+
+    .Grid th {
+        padding: 4px 2px;
+        color: #fff;
+        background: #363670 url(Images/grid-header.png) repeat-x top;
+        border-left: solid 1px #525252;
+        font-size: 0.9em;
+    }
+
+    .Grid .alt {
+        background: #fcfcfc url(Images/grid-alt.png) repeat-x top;
+    }
+
+    .Grid .pgr {
+        background: #363670 url(Images/grid-pgr.png) repeat-x top;
+    }
+
+        .Grid .pgr table {
+            margin: 3px 0;
+        }
+
+        .Grid .pgr td {
+            border-width: 0;
+            padding: 0 6px;
+            border-left: solid 1px #666;
+            font-weight: bold;
+            color: #fff;
+            line-height: 12px;
+        }
+
+        .Grid .pgr a {
+            color: Gray;
+            text-decoration: none;
+        }
+
+            .Grid .pgr a:hover {
+                color: #000;
+                text-decoration: none;
+            }
+
+- See more at: http://www.dotnetfox.com/articles/gridview-custom-css-style-example-in-Asp-Net-1088.aspx#sthash.vop3e4mq.dpuf .Menu {
+}
+
+.Menu ul {
+    background: #7795BD;
+}
+
+    .Menu ul li {
+        background: #7795BD repeat-x;
+        text-align: center;
+        /* set width if needed.*/
+        width: 200px;
+    }
+
+        .Menu ul li a {
+            color: black;
+            padding: 4px 2px 4px;
+            padding-left: 8px !important;
+            border: 1px solid #648ABD;
+            border-bottom: 0;
+        }
+
+            .Menu ul li a:hover {
+                background-image: none;
+            }
+
+            .Menu ul li a:hover {
+                color: White;
+            }
+
+        .Menu ul li a {
+            color: Black;
+        }

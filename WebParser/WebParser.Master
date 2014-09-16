@@ -1,7 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="WebParser.master.cs" Inherits="WebParser.WebParser" %>
 
 <%@ Register TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
-<link href="Style.css" rel="stylesheet" />
+<link  href="Style/Style.css" type="text/css" rel="stylesheet"  />
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
