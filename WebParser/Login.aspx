@@ -65,6 +65,12 @@
                                       <asp:Button ID="Button1" CssClass="button" runat="server" OnClick="login_Click" Text="Log in" />
                                 </td>
                             </tr>
+                       
+                            <tr >
+                                <td >
+                                      <asp:Label ID="lblErrorMessage" Font-Bold="true" Font-Size="Large" Visible="false" runat="server"></asp:Label>
+                                </td>
+                            </tr>
                         </table>
 
                     </div>
@@ -76,7 +82,7 @@
                 </fieldset>
             </asp:Panel>
 
-            <asp:Label ID="lblErrorMessage" Visible="false" runat="server"></asp:Label>
+          
 
            
 

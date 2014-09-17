@@ -62,12 +62,18 @@
                                 <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Register" />
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="2">
+                                <asp:Label ID="lblMessage" Font-Bold="true" Font-Size="Large" Visible="false" runat="server"></asp:Label>
+                            </td>
+                            
+                        </tr>
                     </table>
                 </fieldset>
             </asp:Panel>
 
             
-            <asp:Label ID="lblMessage" Visible="false" runat="server"></asp:Label>
+            
         </ContentTemplate>
     </asp:UpdatePanel>
 

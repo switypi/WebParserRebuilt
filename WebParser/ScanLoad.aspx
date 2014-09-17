@@ -1,10 +1,21 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WebParser.Master" AutoEventWireup="true" CodeBehind="ScanLoad.aspx.cs" Inherits="WebParser.ScanLoad" %>
+
 <%@ Register TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <style type="text/css">
+        input[type="file"] {
+            position: relative;
+            text-align: right;
+            -moz-opacity: 0;
+            filter: alpha(opacity: 0);
+            opacity: 0;
+            z-index: 2;
+        }
+    </style>
     <script type="text/javascript">
         function gridRowOnclick(ctrlId) {
-            alert(ctrlId)
+           
             var retVal = confirm("Do you want to continue ?");
             if (retVal == true) {
                 __doPostBack(ctrlId, 'FROMBTN')
@@ -15,14 +26,14 @@
         }
 
     </script>
-    <asp:UpdatePanel ID="updtMaster" runat="server"  UpdateMode="Conditional">
+    <asp:UpdatePanel ID="updtMaster" runat="server" UpdateMode="Conditional">
         <Triggers>
             <asp:PostBackTrigger ControlID="Button1" />
         </Triggers>
         <ContentTemplate>
             <asp:Panel runat="server" HorizontalAlign="Center">
-                <fieldset style="width: 44%; vertical-align: middle">
-
+                <fieldset style="width: 44%; vertical-align: middle; margin-top: 20px">
+                    <legend>Scan documents</legend>
                     <table border="0">
                         <tr>
                             <td>
@@ -36,14 +47,14 @@
                         </tr>
                     </table>
 
-                    <asp:Panel ID="dvNewScan" runat="server" >
+                    <asp:Panel ID="dvNewScan" runat="server">
                         <table>
                             <tr>
                                 <td>
-                                    <asp:Label ID="lblClientName" CssClass="label"  Text="Client Name" runat="server"></asp:Label>
+                                    <asp:Label ID="lblClientName" CssClass="label" Text="Client Name" runat="server"></asp:Label>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txtClientName" CssClass="txtBox"  Width="200px" runat="server" /><br />
+                                    <asp:TextBox ID="txtClientName" CssClass="txtBox" Width="200px" runat="server" /><br />
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="txtClientName" CssClass="field-validation-error" ErrorMessage="The client name field is required." />
                                 </td>
                             </tr>
@@ -61,7 +72,8 @@
                                     <asp:Label ID="lblScanDate" CssClass="label" Text="Scan Date" runat="server"></asp:Label>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txtDate" CssClass="txtBox" Width="200px"  runat="server" />
+                                    <asp:TextBox ID="txtDate" CssClass="txtBox" Width="200px" runat="server" />
+                                    <ajaxToolkit:CalendarExtender id="Calendar1" popupbuttonid="txtDate" runat="server" targetcontrolid="txtDate" format="dd/MM/yyyy"></ajaxToolkit:CalendarExtender>
                                     <div>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="txtDate" CssClass="field-validation-error" ErrorMessage="The scan date field is required." />
                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" ForeColor="Red" runat="server"
@@ -71,28 +83,34 @@
                             </tr>
                             <tr>
                                 <td>
-                                     <asp:Label ID="lblUploadNewXmlFIle" CssClass="label" Text="Upload XMl file" runat="server"></asp:Label>
+                                    <asp:Label ID="lblUploadNewXmlFIle" CssClass="label" Text="Upload file" runat="server"></asp:Label>
                                 </td>
                                 <td>
-                                     <ajaxtoolkit:asyncfileupload id="fileUpload1" Height="30px" Width="280px" runat="server" /><br />
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="txtDate" CssClass="field-validation-error" ErrorMessage="The scan date field is required." />
+                                    <ajaxToolkit:AsyncFileUpload ID="fileUpload1" Width="280px" runat="server" />
+                                    <br />
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="txtDate" CssClass="field-validation-error" ErrorMessage="The scan date field is required." />--%>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2" align="center">
                                     <asp:Button ID="Button1" runat="server" Text="Save" OnClick="btnsave_Click"
-                                    Style="width: 85px" />
+                                        Style="width: 85px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label ID="lblmessage" Font-Bold="true" Font-Size="Large" runat="server" />
                                 </td>
                             </tr>
 
                         </table>
-                        
+
                     </asp:Panel>
 
                     <asp:Panel ID="dvAdditionalScan" runat="server">
-                        <label >Scan data:</label>
-                        <asp:GridView runat="server" GridLines="Vertical" ID="grdScanList"   CssClass="Grid"
-                             OnRowEditing="grdScanList_RowEditing"   AutoGenerateColumns="False" AlternatingRowStyle-CssClass="alt" >
+
+                        <asp:GridView runat="server" GridLines="Vertical" ID="grdScanList" CssClass="Grid"
+                            OnRowEditing="grdScanList_RowEditing" AutoGenerateColumns="False" AlternatingRowStyle-CssClass="alt">
                             <Columns>
                                 <asp:BoundField HeaderText="Scan Id" DataField="ScanID" />
                                 <asp:BoundField HeaderText="Scan Name" DataField="ScanName" />
@@ -104,11 +122,10 @@
 
                         </asp:GridView>
                     </asp:Panel>
+
                 </fieldset>
 
             </asp:Panel>
-
-             <asp:Label ID="lblmessage" runat="server" />
 
         </ContentTemplate>
     </asp:UpdatePanel>
