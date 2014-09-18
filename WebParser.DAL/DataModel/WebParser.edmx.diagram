@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="WebParserModel.ScanMaster" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="WebParserModel.UserProfile" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="WebParserModel.FK_CurrScan_ScanMaster" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="WebParserModel.ScanNumber" Width="1.5" PointX="8.75" PointY="8.25" />
+        <EntityTypeShape EntityType="WebParserModel.ScanNumber" Width="1.5" PointX="10.672466921933214" PointY="17.165412821418332" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

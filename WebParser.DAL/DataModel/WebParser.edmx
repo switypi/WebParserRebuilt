@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="WebParserModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WebParserModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="WebParserModelStoreContainer">
           <EntitySet Name="ComplianceMaster" EntityType="WebParserModel.Store.ComplianceMaster" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CurrScan" EntityType="WebParserModel.Store.CurrScan" store:Type="Tables" Schema="dbo" />
@@ -84,7 +84,7 @@
           <Property Name="SubScanId" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="ScanName" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="ScanDate" Type="date" Nullable="false" />
+          <Property Name="ScanDate" Type="datetime" Nullable="false" />
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>

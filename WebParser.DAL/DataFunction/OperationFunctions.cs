@@ -30,8 +30,14 @@ namespace WebParser.DAL.DataFunction
             {
                 if (!inputDTOList.Any(c => c.IsAdditionalScan))
                 {
-                    context.ScanNumbers.Add(new ScanNumber() { UserId = inputDTOList.First().UserId });
-                    scanId = context.ScanNumbers.Where(c => c.UserId == inputDTOList.First().UserId).Last().ScanId;
+                    ScanNumber newNumber = new ScanNumber() { UserId = inputDTOList.First().UserId };
+                    context.ScanNumbers.Add(newNumber);
+                    context.SaveChanges();
+
+                    var userID = inputDTOList.First().UserId;
+                    var listOfScan = context.ScanNumbers.Where(c => c.UserId == userID).ToList();
+                    scanId = listOfScan.Last().ScanId;
+                    master.ScanId = scanId;
                 }
                 foreach (var item in inputDTOList)
                 {

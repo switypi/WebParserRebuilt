@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -16,7 +17,7 @@ namespace WebParser
         {
             if (!Page.IsPostBack)
             {
-                
+
             }
             else
             {
@@ -42,7 +43,7 @@ namespace WebParser
                 }
 
             }
-                       
+
 
             (this.Master.FindControl("lblLoginName") as Label).Text = Session["UserName"] as string;
             (this.Master.FindControl("hypLogOut") as HyperLink).Visible = true;
@@ -108,6 +109,8 @@ namespace WebParser
                     txtDate.Text = string.Empty;
                     txtClientName.Text = string.Empty;
 
+                    lblmessage.Visible = true;
+                    lblmessage.Text="Upload Successfull.";
 
                 }
                 else
