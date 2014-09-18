@@ -86,7 +86,7 @@
                                     <asp:Label ID="lblUploadNewXmlFIle" CssClass="label" Text="Upload file" runat="server"></asp:Label>
                                 </td>
                                 <td>
-                                    <ajaxToolkit:AsyncFileUpload ID="fileUpload1" Width="280px" runat="server" />
+                                    <ajaxToolkit:AsyncFileUpload  OnUploadedFileError="fileUpload1_UploadedFileError" ID="fileUpload1" Width="280px" runat="server" />
                                     <br />
                                     <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="txtDate" CssClass="field-validation-error" ErrorMessage="The scan date field is required." />--%>
                                 </td>

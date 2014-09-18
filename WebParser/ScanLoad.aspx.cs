@@ -15,6 +15,7 @@ namespace WebParser
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (!Page.IsPostBack)
             {
 
@@ -48,6 +49,8 @@ namespace WebParser
             (this.Master.FindControl("lblLoginName") as Label).Text = Session["UserName"] as string;
             (this.Master.FindControl("hypLogOut") as HyperLink).Visible = true;
         }
+
+       
 
         private void PerformCustomAction()
         {
@@ -123,7 +126,7 @@ namespace WebParser
             {
                 lblmessage.Visible = true;
                 lblmessage.Text = "Import failed.";
-                throw;
+                //throw;
             }
 
 
@@ -165,6 +168,11 @@ namespace WebParser
                 //attach the JavaScript function with the ID as the paramter
                 lb.Attributes.Add("onclick", "return gridRowOnclick('" + lb.ClientID + "');");
             }
+        }
+
+        protected void fileUpload1_UploadedFileError(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
+        {
+            lblmessage.Text = "Import file size is oversized.";
         }
 
     }
