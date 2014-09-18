@@ -14,8 +14,9 @@ namespace WebParser
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Menu mnuControl = this.Master.FindControl("menuMaster") as Menu;
-            mnuControl.Enabled = false;
+            //Menu mnuControl = this.Master.FindControl("menuMaster") as Menu;
+            //mnuControl.Enabled = false;
+            lblErrorMessage.Visible = false;
             
         }
         protected void login_Click(object sender, EventArgs e)

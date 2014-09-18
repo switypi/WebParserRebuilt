@@ -26,9 +26,23 @@ namespace WebParser
                 }
 
             }
-            Menu mnuControl = this.Master.FindControl("menuMaster") as Menu;
-            mnuControl.Items[0].Enabled = false;
-            mnuControl.Items[3].Enabled = false;
+
+            if (Session["IsAdmin"] != null)
+            {
+                Menu mnuControl = this.Master.FindControl("menuMaster") as Menu;
+                if (!((bool)Session["IsAdmin"]))
+                {
+                    mnuControl.Items[0].Enabled = false;
+                    mnuControl.Items[3].Enabled = false;
+                }
+                else
+                {
+                    mnuControl.Items[0].Enabled = true;
+                    mnuControl.Items[3].Enabled = true;
+                }
+
+            }
+                       
 
             (this.Master.FindControl("lblLoginName") as Label).Text = Session["UserName"] as string;
             (this.Master.FindControl("hypLogOut") as HyperLink).Visible = true;

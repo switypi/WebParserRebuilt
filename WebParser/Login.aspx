@@ -1,7 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WebParser.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="WebParser.Login" %>
+﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="WebParser.Login" %>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<%@ Register TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title></title>
     <style type="text/css">
         .overlay {
             position: fixed;
@@ -28,76 +31,82 @@
                 color: #000;
             }
 
-            /*.overlayContent img {
+        /*.overlayContent img {
                 width: 80px;
                 height: 80px;
             }*/
     </style>
-    <asp:UpdatePanel ID="updtlog" runat="server" UpdateMode="Always">
-        <ContentTemplate>
-            <asp:Panel ID="dvNewScan" CssClass="panel" HorizontalAlign="Center"  runat="server">
 
-                <fieldset style="width: 44%;vertical-align:middle" >
-                    <legend>Log in Form</legend>
-                    <div>
-                        <table>
-                            <tr>
-                                <td>
-                                    <asp:Label CssClass="label" ID="Label1" runat="server" AssociatedControlID="UserName">User name</asp:Label>
-                                </td>
-                                <td>
-                                    <asp:TextBox runat="server" CssClass="txtBox" Width="150px" ID="UserName" /><br />
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="UserName" CssClass="field-validation-error" ErrorMessage="The user name field is required." />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Label ID="Label2" CssClass="label"  runat="server" AssociatedControlID="Password">Password</asp:Label>
-                                </td>
-                                <td>
-                                    <asp:TextBox runat="server" CssClass="txtBox" Width="150px" ID="Password" TextMode="Password" /><br />
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ForeColor="Red" runat="server" Display="Dynamic" ControlToValidate="Password" CssClass="field-validation-error" ErrorMessage="The password field is required." />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" align="center">
+</head>
+<body>
+    <form id="form1" runat="server">
+        <ajaxToolkit:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
+        </ajaxToolkit:ToolkitScriptManager>
+        <asp:UpdatePanel ID="updtlog" runat="server" UpdateMode="Always">
+            <ContentTemplate>
+                <asp:Panel ID="dvNewScan" CssClass="panel" HorizontalAlign="Center" runat="server">
+                   
 
-                                      <asp:Button ID="Button1" CssClass="button" runat="server" OnClick="login_Click" Text="Log in" />
-                                </td>
-                            </tr>
-                       
-                            <tr >
-                                <td >
-                                      <asp:Label ID="lblErrorMessage" Font-Bold="true" Font-Size="Large" Visible="false" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                        </table>
+                    <fieldset style="width: 44%; vertical-align: middle">
+                        <legend>Log in Form</legend>
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <asp:Label CssClass="label" ID="Label1" runat="server" AssociatedControlID="UserName">User name</asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:TextBox runat="server" CssClass="txtBox" Width="150px" ID="UserName" /><br />
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ForeColor="Red" Display="Dynamic" runat="server" ControlToValidate="UserName" CssClass="field-validation-error" ErrorMessage="The user name field is required." />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="Label2" CssClass="label" runat="server" AssociatedControlID="Password">Password</asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:TextBox runat="server" CssClass="txtBox" Width="150px" ID="Password" TextMode="Password" /><br />
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ForeColor="Red" runat="server" Display="Dynamic" ControlToValidate="Password" CssClass="field-validation-error" ErrorMessage="The password field is required." />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
 
-                    </div>
+                                        <asp:Button ID="Button1" CssClass="button" runat="server" OnClick="login_Click" Text="Log in" />
+                                    </td>
+                                </tr>
 
-                    <div>
-                    </div>
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="lblErrorMessage" Font-Bold="true" Font-Size="Large" Visible="false" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
 
-                  
-                </fieldset>
-            </asp:Panel>
+                        </div>
 
-          
+                        <div>
+                        </div>
 
-           
 
-        </ContentTemplate>
-    </asp:UpdatePanel>
+                    </fieldset>
+                </asp:Panel>
 
-    <asp:UpdateProgress ID="updProgress"
-        AssociatedUpdatePanelID="updtlog"
-        runat="server">
-        <ProgressTemplate>
-            <div class="overlay" />
-            <div class="overlayContent">
-                <img ID="Image1" runat="server"  src="~/Images/ImgLoader.gif" />
-            </div>
-        </ProgressTemplate>
-    </asp:UpdateProgress>
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
-</asp:Content>
+         <asp:UpdateProgress ID="updProgress"
+                        AssociatedUpdatePanelID="updtlog"
+                        runat="server">
+                        <ProgressTemplate>
+                            <div class="overlay" />
+                            <div class="overlayContent">
+                                <img id="Image1" runat="server" src="~/Images/ImgLoader.gif" />
+                            </div>
+                        </ProgressTemplate>
+                    </asp:UpdateProgress>
+    </form>
+</body>
+</html>
+
+
