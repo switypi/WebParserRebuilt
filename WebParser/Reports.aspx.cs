@@ -127,7 +127,7 @@ namespace WebParser
             HttpResponse httpResponse = Response;
             httpResponse.Clear();
             httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx\"");
+            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
 
             // Flush the workbook to the Response.OutputStream
             using (MemoryStream memoryStream = new MemoryStream())

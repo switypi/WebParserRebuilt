@@ -58,6 +58,10 @@
           <Property Name="PluginOutputReportable" Type="bit" Nullable="false" />
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ScanMasterId" Type="int" />
+          <Property Name="ComplianceCheckName" Type="varchar(max)" />
+          <Property Name="Complianceinfo" Type="varchar(max)" />
+          <Property Name="ComplianceSolution" Type="varchar(max)" />
+          <Property Name="ComplianceSeeAlso" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="MasterPlugins">
           <Key>
@@ -174,6 +178,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="ScanMasterId" Type="Int32" />
           <NavigationProperty Name="ScanMaster" Relationship="WebParserModel.FK_CurrScan_ScanMaster" FromRole="CurrScan" ToRole="ScanMaster" />
+          <Property Type="String" Name="ComplianceCheckName" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Complianceinfo" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ComplianceSolution" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ComplianceSeeAlso" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="MasterPlugin">
           <Key>
@@ -257,6 +265,10 @@
           <EntitySetMapping Name="CurrScans">
             <EntityTypeMapping TypeName="WebParserModel.CurrScan">
               <MappingFragment StoreEntitySet="CurrScan">
+                <ScalarProperty Name="ComplianceSeeAlso" ColumnName="ComplianceSeeAlso" />
+                <ScalarProperty Name="ComplianceSolution" ColumnName="ComplianceSolution" />
+                <ScalarProperty Name="Complianceinfo" ColumnName="Complianceinfo" />
+                <ScalarProperty Name="ComplianceCheckName" ColumnName="ComplianceCheckName" />
                 <ScalarProperty Name="ScanID" ColumnName="ScanID" />
                 <ScalarProperty Name="SubScanID" ColumnName="SubScanID" />
                 <ScalarProperty Name="ReportHost" ColumnName="ReportHost" />

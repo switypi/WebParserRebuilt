@@ -37,6 +37,10 @@ namespace WebParser.DAL.DataModel
         public bool PluginOutputReportable { get; set; }
         public int Id { get; set; }
         public Nullable<int> ScanMasterId { get; set; }
+        public string ComplianceCheckName { get; set; }
+        public string Complianceinfo { get; set; }
+        public string ComplianceSolution { get; set; }
+        public string ComplianceSeeAlso { get; set; }
     
         public virtual ScanMaster ScanMaster { get; set; }
     }

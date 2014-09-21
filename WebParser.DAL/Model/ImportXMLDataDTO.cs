@@ -67,6 +67,18 @@ namespace WebParser.DAL.Model
         [DataMember]
         public bool IsAdditionalScan { get; set; }
 
+        [DataMember]
+        public string ComplianceCheckName { get; set; }
+
+        [DataMember]
+        public string Complianceinfo { get; set; }
+
+        [DataMember]
+        public string ComplianceSolution { get; set; }
+
+        [DataMember]
+        public string ComplianceSeeAlso { get; set; }
+
     }
 
 

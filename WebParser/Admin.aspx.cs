@@ -56,16 +56,16 @@ namespace WebParser
             switch (int.Parse(val))
             {
                 case 1:
-                    List = obj.NewRegularScan(int.Parse(drpScanList.SelectedValue));
-                    if (List.Count > 0)
-                        ShowExcelFile(List, "NewPluginData");
+                   var ListOfPlugin = obj.NewRegularScan(int.Parse(drpScanList.SelectedValue));
+                   if (ListOfPlugin.Count > 0)
+                        ShowExcelFile(ListOfPlugin, "NewPluginData");
                     else
                         lblNoRecords.Visible = true;
                     break;
                 case 2:
-                    List = obj.NewComplianceData(int.Parse(drpScanList.SelectedValue));
-                    if (List.Count > 0)
-                        ShowExcelFile(List, "NewComplianceData");
+                   var ListOfComp = obj.NewComplianceData(int.Parse(drpScanList.SelectedValue));
+                   if (ListOfComp.Count > 0)
+                        ShowExcelFile(ListOfComp, "NewComplianceData");
                     else
                         lblNoRecords.Visible = true;
                     break;
@@ -126,7 +126,101 @@ namespace WebParser
             HttpResponse httpResponse = Response;
             httpResponse.Clear();
             httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx\"");
+            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+            // Flush the workbook to the Response.OutputStream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                excelworkBook.SaveAs(memoryStream);
+                memoryStream.WriteTo(httpResponse.OutputStream);
+                memoryStream.Close();
+            }
+
+            httpResponse.End();
+        }
+
+        private void ShowExcelFile(List<NewPluginDataDTO> List, string fileName)
+        {
+            excelworkBook = new XLWorkbook();
+            var worksheet = excelworkBook.Worksheets.Add("Sample Sheet");
+
+            foreach (var item in List.ElementAt(0).GetType().GetProperties())
+            {
+                var indexOfItem = List.ElementAt(0).GetType().GetProperties().ToList().IndexOf(item);
+                worksheet.Cell(1, indexOfItem + 1).Value = item.Name;
+            }
+
+            //Print Data;
+            foreach (var itemRow in List)
+            {
+                var rowIndex = List.IndexOf(itemRow) + 1;
+                foreach (var col in itemRow.GetType().GetProperties())
+                {
+                    var indexOfItem = List.ElementAt(0).GetType().GetProperties().ToList().IndexOf(col);
+                    var value = typeof(NewPluginDataDTO).GetProperty(col.Name).GetValue(itemRow, null);
+
+                    worksheet.Cell(rowIndex + 1, indexOfItem + 1).Value = value == null ? null : (value.ToString().Count() >= 32000 ? value.ToString().Substring(0, 32000) : value);
+                    if (col.Name == "PluginId")
+                    {
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).DataType = XLCellValues.Number;
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).Style.NumberFormat.NumberFormatId = 1;
+
+                    }
+                }
+            }
+            // Prepare the response
+            HttpResponse httpResponse = Response;
+            httpResponse.Clear();
+            httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+
+            // Flush the workbook to the Response.OutputStream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                excelworkBook.SaveAs(memoryStream);
+                memoryStream.WriteTo(httpResponse.OutputStream);
+                memoryStream.Close();
+            }
+
+            httpResponse.End();
+        }
+
+        private void ShowExcelFile(List<NewComplianceDataDTO> List, string fileName)
+        {
+            excelworkBook = new XLWorkbook();
+            var worksheet = excelworkBook.Worksheets.Add("Sample Sheet");
+
+            foreach (var item in List.ElementAt(0).GetType().GetProperties())
+            {
+                var indexOfItem = List.ElementAt(0).GetType().GetProperties().ToList().IndexOf(item);
+                worksheet.Cell(1, indexOfItem + 1).Value = item.Name;
+            }
+
+            //Print Data;
+            foreach (var itemRow in List)
+            {
+                var rowIndex = List.IndexOf(itemRow) + 1;
+                foreach (var col in itemRow.GetType().GetProperties())
+                {
+                    var indexOfItem = List.ElementAt(0).GetType().GetProperties().ToList().IndexOf(col);
+                    var value = typeof(NewComplianceDataDTO).GetProperty(col.Name).GetValue(itemRow, null);
+
+                    worksheet.Cell(rowIndex + 1, indexOfItem + 1).Value = value == null ? null : (value.ToString().Count() >= 32000 ? value.ToString().Substring(0, 32000) : value);
+                    if (col.Name == "PluginId")
+                    {
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).DataType = XLCellValues.Number;
+                        worksheet.Cell(rowIndex + 1, indexOfItem + 1).Style.NumberFormat.NumberFormatId = 1;
+
+                    }
+                }
+            }
+            // Prepare the response
+            HttpResponse httpResponse = Response;
+            httpResponse.Clear();
+            httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            httpResponse.AddHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
 
             // Flush the workbook to the Response.OutputStream
             using (MemoryStream memoryStream = new MemoryStream())

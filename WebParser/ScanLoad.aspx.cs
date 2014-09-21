@@ -15,7 +15,7 @@ namespace WebParser
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
             if (!Page.IsPostBack)
             {
 
@@ -50,7 +50,6 @@ namespace WebParser
             (this.Master.FindControl("hypLogOut") as HyperLink).Visible = true;
         }
 
-       
 
         private void PerformCustomAction()
         {
@@ -62,6 +61,8 @@ namespace WebParser
             {
                 txtClientName.Text = dtoItem.First().ClientName;
                 txtNewScanName.Text = dtoItem.First().ScanName;
+                Session["ScanId"] = dtoItem.First().ScanID;
+                Session["SubscanId"] = dtoItem.First().SubScanID;
             }
         }
 
@@ -79,6 +80,8 @@ namespace WebParser
                            ScanDate = DateTime.Parse(txtDate.Text),
                            ScanName = txtNewScanName.Text,
                            IsAdditionalScan = rdbtnAddtional.Checked,
+                           ScanId = Session["ScanId"] != null ? Convert.ToInt32(Session["ScanId"]) : 0,
+                           SubScanId = Session["SubscanId"] != null ? Convert.ToInt32(Session["SubscanId"]) : 0,
                            UserId = Session["UserName"] as string,
                            PlugId = r.Attribute("pluginID").Value,
                            Port = r.Attribute("port") == null ? null : r.Attribute("port").Value,
@@ -97,7 +100,10 @@ namespace WebParser
                            Solution = r.Element("solution") == null ? null : r.Element("solution").Value,
                            Synopsis = r.Element("synopsis") == null ? null : r.Element("synopsis").Value,
                            PluginOutput = r.Element("plugin_output") == null ? null : r.Element("plugin_output").Value,
-
+                           ComplianceCheckName = r.Element(cm + "cmcompliance-check-name") == null ? null : r.Element(cm + "cmcompliance-check-name").Value,
+                           Complianceinfo = r.Element(cm + "compliance-info") == null ? null : r.Element(cm + "compliance-info").Value,
+                           ComplianceSeeAlso = r.Element(cm + "compliance-see-also") == null ? null : r.Element(cm + "compliance-see-also").Value,
+                           ComplianceSolution = r.Element(cm + "compliance-solution") == null ? null : r.Element(cm + "compliance-solution").Value,
                        }).ToList();
 
             var obj = new OperationFunctions();
@@ -106,20 +112,27 @@ namespace WebParser
                 ReturnResultDTO retValue = obj.ImportXmlData(dtl);
                 if (retValue.IsSuccess)
                 {
-                    lblmessage.Visible = true;
-                    lblmessage.Text = retValue.Message;
                     txtNewScanName.Text = string.Empty;
                     txtDate.Text = string.Empty;
                     txtClientName.Text = string.Empty;
 
                     lblmessage.Visible = true;
-                    lblmessage.Text="Upload Successfull.";
+                    lblmessage.Text = "Upload successfull.";
+                    lblComplianceMessage.Text = retValue.NewComplianceMessage;
+                    lblNewCompaliance.Text = retValue.NewComplianceCount.ToString();
+                    lblNewPlugins.Text = retValue.NewPluginCount.ToString();
+                    lblPluginMessage.Text = retValue.NewPluginMessage;
+                    lblNewVariance.Text = retValue.NewVarianceCount.ToString();
+                    lblVarianceMessage.Text = retValue.NewVarianceMessage;
 
+                    pnlMessage.Visible = true;
+                    RadioButton1.Checked = true;
                 }
                 else
                 {
                     lblmessage.Visible = true;
                     lblmessage.Text = "Import failed.";
+                    RadioButton1.Checked = true;
                 }
             }
             catch (Exception ex)
@@ -137,10 +150,6 @@ namespace WebParser
             List<ScanMasterDTO> scanMasters = new List<ScanMasterDTO>();
             var obj = new OperationFunctions();
             scanMasters = obj.GetPreviousScanResult(HttpContext.Current.Session["UserName"] as string);
-            //ScanMasterDTO a = new ScanMasterDTO();
-            //a.ClientName = "aaa";
-            //a.ScanName = "ff";
-            //scanMasters.Add(a);
             grdScanList.DataSource = scanMasters;
             grdScanList.DataBind();
             return null;
@@ -150,23 +159,29 @@ namespace WebParser
         {
             dvAdditionalScan.Visible = false;
             dvNewScan.Visible = true;
+            lblmessage.Visible = false;
         }
 
         protected void AddtionalScan_CheckedChanged(object sender, EventArgs e)
         {
             dvAdditionalScan.Visible = true;
             dvNewScan.Visible = false;
+            pnlMessage.Visible = false;
             GetRecords();
         }
 
         protected void grdScanList_RowEditing(object sender, GridViewEditEventArgs e)
         {
-            (sender as GridView).SelectedIndex = e.NewEditIndex;
-            Button lb = (Button)(sender as GridView).Rows[e.NewEditIndex].Cells[4].Controls[0];
-            if (lb != null)
+            grdScanList.SelectedIndex = e.NewEditIndex;
+            PerformCustomAction();
+        }
+
+        protected void grdScanList_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                //attach the JavaScript function with the ID as the paramter
-                lb.Attributes.Add("onclick", "return gridRowOnclick('" + lb.ClientID + "');");
+                Button l = (Button)e.Row.FindControl("deleteButton");
+                l.Attributes.Add("onclick", "javascript:return " + " confirm('Are you sure you want to continue ? ')");
             }
         }
 
@@ -174,6 +189,7 @@ namespace WebParser
         {
             lblmessage.Text = "Import file size is oversized.";
         }
+             
 
     }
 }

@@ -15,5 +15,21 @@ namespace WebParser.DAL.Model
 
         [DataMember]
         public string Message { get; set; }
+
+        [DataMember]
+        public string NewPluginMessage { get; set; }
+
+        [DataMember]
+        public string NewComplianceMessage { get; set; }
+
+        [DataMember]
+        public string NewVarianceMessage { get; set; }
+
+        [DataMember]
+        public int NewPluginCount { get; set; }
+        [DataMember]
+        public int NewComplianceCount { get; set; }
+        [DataMember]
+        public int NewVarianceCount { get; set; }
     }
 }

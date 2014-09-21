@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using WebParser.DAL.DataModel;
 using WebParser.DAL.Model;
 
@@ -50,25 +52,29 @@ namespace WebParser.DAL.DataFunction
                 int value = 0;
                 try
                 {
-                    value = context.SaveChanges();
+                    using (TransactionScope trans = new TransactionScope())
+                    {
+                        value = context.SaveChanges();
+                        if (value > 0)
+                        {
+                            dtoItem = CheckExistingData(scanId);
+                            dtoItem.IsSuccess = true;
+                            trans.Complete();
+                        }
+                        else
+                        {
+                            dtoItem = new ReturnResultDTO();
+                            dtoItem.IsSuccess = false;
+                            trans.Dispose();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
 
-                if (value > 0)
-                {
 
-                    dtoItem = CheckExistingData();
-                    dtoItem.IsSuccess = true;
-
-                }
-                else
-                {
-                    dtoItem = new ReturnResultDTO();
-                    dtoItem.IsSuccess = false;
-                }
 
             }
             return dtoItem;
@@ -98,6 +104,12 @@ namespace WebParser.DAL.DataFunction
             newItem.Solution = inputDTO.Solution;
             newItem.SubScanID = subScnaID;
             newItem.Synopsis = inputDTO.Synopsis;
+            newItem.ComplianceCheckName = inputDTO.ComplianceCheckName;
+            newItem.Complianceinfo = inputDTO.Complianceinfo;
+            newItem.ComplianceSeeAlso = inputDTO.ComplianceSeeAlso;
+            newItem.ComplianceSolution = inputDTO.ComplianceSolution;
+
+
             return newItem;
         }
 
@@ -165,32 +177,57 @@ namespace WebParser.DAL.DataFunction
             return scanMasterList;
         }
 
-        private ReturnResultDTO CheckExistingData()
+        private ReturnResultDTO CheckExistingData(int scanId)
         {
             ReturnResultDTO dto = new ReturnResultDTO();
             using (var context = new WebParserEntities())
             {
                 List<int> plugins = context.MasterPlugins.Select(x => x.PluginID).ToList();
-                if (context.CurrScans.Where(c => plugins.Contains(c.PluginID) == false && c.Compliance == null).Count() > 0)
-                    dto.Message = "New Plugins found. Please update";
-                if (dto.Message == "")
+
+                var plgData = context.CurrScans.Where(c => plugins.Contains(c.PluginID) == false && c.Compliance == null && c.ScanID == scanId).ToList();
+                var cntOfPlgData = plgData.Select(c => c.PluginID).Distinct().Count();
+                if (cntOfPlgData > 0)
                 {
-                    List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).ToList();
-                    if (context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance == false).Count() > 0)
-                        dto.Message = "New Compliance Checks found. Please update";
+                    dto.NewPluginMessage = "New Plugins found. Please update";
+                    dto.NewPluginCount = cntOfPlgData;
+
                 }
-                if (dto.Message == "")
+                else
                 {
-                    List<MasterPlugin> masterPlugindata = context.MasterPlugins.Where(v => v.PluginOutputReportable == true).ToList();
-                    var count = (from item in context.CurrScans
-                                 join plg in masterPlugindata on item.PluginID equals plg.PluginID
-                                 where item.PluginOutput != plg.PluginOutPut
-                                 select item).Count();
-                    if (count > 0)
-                        dto.Message = "Plugin output variance found.Please review.";
+                    dto.NewPluginMessage = "Ok";
+                    dto.NewPluginCount = cntOfPlgData;
                 }
-                if (dto.Message == "")
-                    dto.Message = "Proceed to report generation";
+
+                List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).ToList();
+                var compData = context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance == false && c.ScanID == scanId).ToList();
+                var compDataCount = compData.Select(c => c.ComplianceCheckID).Distinct().Count();
+                if (compDataCount > 0)
+                {
+                    dto.NewComplianceMessage = "New Compliance Checks found. Please update";
+                    dto.NewComplianceCount = compDataCount;
+                }
+                else
+                {
+                    dto.NewComplianceMessage = "Ok";
+                    dto.NewComplianceCount = compDataCount;
+                }
+
+                List<MasterPlugin> masterPlugindata = context.MasterPlugins.Where(v => v.PluginOutputReportable == true && v.PluginOutPut != null).ToList();
+                var count = (from item in context.CurrScans
+                             join plg in masterPlugindata on item.PluginID equals plg.PluginID
+                             where item.PluginOutput != plg.PluginOutPut && item.ScanID == scanId
+                             select item).Count();
+                if (count > 0)
+                {
+                    dto.NewVarianceMessage = "Plugin output variance found.Please review.";
+                    dto.NewVarianceCount = count;
+                }
+                else
+                {
+                    dto.NewVarianceMessage = "Ok";
+                    dto.NewVarianceCount = count;
+                }
+                dto.IsSuccess = true;
                 return dto;
             }
 
@@ -217,9 +254,9 @@ namespace WebParser.DAL.DataFunction
             return scanMasterList;
         }
 
-        public List<CurrScanDTO> NewRegularScan(int scanId)
+        public List<NewPluginDataDTO> NewRegularScan(int scanId)
         {
-            List<CurrScanDTO> datalist = new List<CurrScanDTO>();
+            List<NewPluginDataDTO> datalist = new List<NewPluginDataDTO>();
 
             using (var context = new WebParser.DAL.DataModel.WebParserEntities())
             {
@@ -228,21 +265,30 @@ namespace WebParser.DAL.DataFunction
                 {
                     datalist = (from item in context.CurrScans.Where(c => plugins.Contains(c.PluginID) == false && c.Compliance == false && c.ScanID == scanId)
                                 orderby item.PluginID
-                                select new CurrScanDTO()
+                                select new NewPluginDataDTO()
                                 {
-                                    Description = item.Description,
-                                    ExploitabilityEase = item.ExploitabilityEase,
-                                    ExploitAvailable = item.ExploitAvailable,
-                                    ExploitedByMalware = item.ExploitedByMalware,
                                     PluginId = item.PluginID,
-                                    PluginOutput = item.PluginOutput,
-                                    RiskFactor = item.RiskFactor,
-                                    SeeAlso = item.SeeAlso,
-                                    Solution = item.Solution,
                                     Synopsis = item.Synopsis,
-                                    PluginOutPutReportable = item.PluginOutputReportable,
+                                    UpdatedSynopsis = "",
+                                    Description = item.Description,
+                                    ExploitAvailable = item.ExploitAvailable,
+                                    ExploitabilityEase = item.ExploitabilityEase,
+                                    ExploitedByMalware = item.ExploitedByMalware,
+                                    UpdatedDescription = "",
+                                    Reportable = "",
+                                    RiskFactor = item.RiskFactor,
+                                    UpdatedRiskFactor = "",
+                                    PluginOutput = item.PluginOutput,
+                                    Solution = item.Solution,
+                                    SeeAlso = item.SeeAlso,
+                                    PluginOutPutReportable = "",
+                                    UpdatedCategory1 = "",
+                                    UpdatedCategory2 = "",
+                                    UpdatedCategory3 = "",
 
                                 }).ToList();
+                    var plgIds = datalist.Select(c => c.PluginId).Distinct().ToList();
+                    datalist = datalist.Where(c => plgIds.Contains(c.PluginId)).GroupBy(v => v.PluginId).Select(b => b.First()).ToList();
 
                 }
                 catch (Exception ex)
@@ -255,24 +301,37 @@ namespace WebParser.DAL.DataFunction
             return datalist;
         }
 
-        public List<CurrScanDTO> NewComplianceData(int scanId)
+        public List<NewComplianceDataDTO> NewComplianceData(int scanId)
         {
-            List<CurrScanDTO> datalist = new List<CurrScanDTO>();
+            List<NewComplianceDataDTO> datalist = new List<NewComplianceDataDTO>();
             try
             {
                 using (var context = new WebParser.DAL.DataModel.WebParserEntities())
                 {
-                    List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).ToList();
+                    List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).Distinct().ToList();
 
-                    datalist = (from item in context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance != true && c.ScanID == scanId)
+                    datalist = (from item in context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance == true && c.ScanID == scanId)
                                 orderby item.PluginID, item.ComplianceCheckID
-                                select new CurrScanDTO()
+                                select new NewComplianceDataDTO()
                                 {
-                                    Description = item.Description,
                                     PluginId = item.PluginID,
-                                    PluginOutput = item.PluginOutput,
+                                    Description = item.Description,
+                                    UpdatedDescription = "",
+                                    Reportable = "",
                                     RiskFactor = item.RiskFactor,
-                                    ComplianceCheckID = item.ComplianceCheckID
+                                    UpdatedRiskFactor = "",
+                                    PluginOutput = item.PluginOutput,
+
+                                    ComplianceCheckID = item.ComplianceCheckID,
+                                    ComplianceCheckName = item.ComplianceCheckName,
+                                    Complianceinfo = item.Complianceinfo,
+                                    ComplianceSeeAlso = item.ComplianceSeeAlso,
+                                    ComplianceSolution = item.ComplianceSolution,
+                                    UpdatedPluginOutput = "",
+                                    UpdatedCategory1 = "",
+                                    UpdatedCategory2 = "",
+                                    UpdatedCategory3 = "",
+
 
                                 }).ToList();
 
@@ -317,10 +376,10 @@ namespace WebParser.DAL.DataFunction
             }
             catch (Exception ex)
             {
-                
+
                 throw ex;
             }
-            
+
             return datalist;
         }
 
@@ -352,10 +411,10 @@ namespace WebParser.DAL.DataFunction
             }
             catch (Exception ex)
             {
-                
+
                 throw ex;
             }
-           
+
             return datalist;
         }
 
