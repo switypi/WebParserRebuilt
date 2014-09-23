@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <div>
             <asp:Panel runat="server" HorizontalAlign="Center">
-                <asp:Label ID="lblErrorMsg" runat="server"></asp:Label><br />
+                <asp:Label ID="lblErrorMsg"  runat="server"></asp:Label><br />
                 <br />
                 <label>Stack Trace</label><br />
                 <asp:TextBox TextMode="MultiLine" Width="300px" ID="errorBox" runat="server"></asp:TextBox>

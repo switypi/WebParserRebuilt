@@ -157,7 +157,7 @@
         <asp:Panel Visible="false" ID="dvAdditionalScan" runat="server">
             <fieldset style="width: 44%; vertical-align: middle; margin-top: 20px">
                 <legend></legend>
-                <asp:GridView runat="server" GridLines="Vertical" ID="grdScanList" OnRowCommand="grdScanList_RowCommand" CssClass="Grid" OnRowDataBound="grdScanList_RowDataBound"
+                <asp:GridView runat="server" GridLines="Vertical" ID="grdScanList"  CssClass="Grid" OnRowDataBound="grdScanList_RowDataBound"
                     OnRowEditing="grdScanList_RowEditing" AutoGenerateColumns="False" AlternatingRowStyle-CssClass="alt">
                     <Columns>
                         <asp:BoundField HeaderText="Scan Id" DataField="ScanID" />

@@ -12,7 +12,8 @@ namespace WebParser
         protected void Page_Load(object sender, EventArgs e)
         {
             Exception caughtException = Server.GetLastError();
-            errorBox.Text = caughtException.InnerException.Message;
+            errorBox.Text = caughtException.InnerException.StackTrace;
+            lblErrorMsg.Text = caughtException.Message;
         }
     }
 }
