@@ -3,7 +3,7 @@
 <%@ Register TagPrefix="ajaxToolkit" Namespace="AjaxControlToolkit" Assembly="AjaxControlToolkit" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <style type="text/css">
+   <%-- <style type="text/css">
         input[type="file"] {
             position: relative;
             text-align: right;
@@ -12,7 +12,7 @@
             opacity: 0;
             z-index: 2;
         }
-    </style>
+    </style>--%>
     <script type="text/javascript">
         function gridRowOnclick(ctrlId) {
 

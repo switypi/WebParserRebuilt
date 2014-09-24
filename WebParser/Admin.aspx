@@ -14,11 +14,11 @@
                          <asp:DropDownList ID="drpScanList" runat="server" Height="25px" Width="150px">
                         </asp:DropDownList>
                     </td>
-                    <td>
-                        <asp:Label ID="Label2" CssClass="label" Text="Select Option" runat="server"></asp:Label>
+                    <td style="margin-left:5px">
+                        <asp:Label ID="Label2" CssClass="label" Text="Select Option"  runat="server"></asp:Label>
                     </td>
                     <td>
-                         <asp:DropDownList ID="drpOptionList" runat="server" AutoPostBack="true" Height="25px" OnSelectedIndexChanged="drpOptionList_SelectedIndexChanged">
+                         <asp:DropDownList ID="drpOptionList" Width="250" runat="server" AutoPostBack="true" Height="25px" OnSelectedIndexChanged="drpOptionList_SelectedIndexChanged">
                             <asp:ListItem Selected="True" Text="Generate “New Plugin Data – Regular Scan" Value="1"></asp:ListItem>
                             <asp:ListItem Text="Generate New Plugin Data – Compliance Scan" Value="2"></asp:ListItem>
                             <asp:ListItem Text="PluginOutput Variance Report-1 – Regular Scan" Value="3"></asp:ListItem>
@@ -58,7 +58,7 @@
                 </tr>
 
                 <tr>
-                    <td style="float: right; margin-top: 10px">
+                    <td style="float: right; margin-top: 10px" colspan="4">
                         <asp:Label Text="No records" runat="server" Font-Bold="true" Font-Size="Large" Visible="false" ID="lblNoRecords"></asp:Label>
                     </td>
                 </tr>

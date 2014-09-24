@@ -182,9 +182,9 @@ namespace WebParser.DAL.DataFunction
             ReturnResultDTO dto = new ReturnResultDTO();
             using (var context = new WebParserEntities())
             {
-                List<int> plugins = context.MasterPlugins.Select(x => x.PluginID).ToList();
+                List<int> plugins = context.MasterPlugins.Select(x => x.PluginID).Distinct().ToList();
 
-                var plgData = context.CurrScans.Where(c => plugins.Contains(c.PluginID) == false && c.Compliance == null && c.ScanID == scanId).ToList();
+                var plgData = context.CurrScans.Where(c => plugins.Contains(c.PluginID) == false && c.Compliance == false && c.ScanID == scanId).ToList();
                 var cntOfPlgData = plgData.Select(c => c.PluginID).Distinct().Count();
                 if (cntOfPlgData > 0)
                 {
@@ -198,8 +198,8 @@ namespace WebParser.DAL.DataFunction
                     dto.NewPluginCount = cntOfPlgData;
                 }
 
-                List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).ToList();
-                var compData = context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance == false && c.ScanID == scanId).ToList();
+                List<string> complianceCheckIDList = context.ComplianceMasters.Select(c => c.ComplianceCheckID).Distinct().ToList();
+                var compData = context.CurrScans.Where(c => complianceCheckIDList.Contains(c.ComplianceCheckID) == false && c.Compliance == true && c.ScanID == scanId).ToList();
                 var compDataCount = compData.Select(c => c.ComplianceCheckID).Distinct().Count();
                 if (compDataCount > 0)
                 {
@@ -215,7 +215,7 @@ namespace WebParser.DAL.DataFunction
                 List<MasterPlugin> masterPlugindata = context.MasterPlugins.Where(v => v.PluginOutputReportable == true && v.PluginOutPut != null).ToList();
                 var count = (from item in context.CurrScans
                              join plg in masterPlugindata on item.PluginID equals plg.PluginID
-                             where item.PluginOutput != plg.PluginOutPut && item.ScanID == scanId
+                             where item.PluginOutput != plg.PluginOutPut && item.ScanID == scanId && item.Compliance==false
                              select item).Count();
                 if (count > 0)
                 {

@@ -100,7 +100,7 @@ namespace WebParser
                            Solution = r.Element("solution") == null ? null : r.Element("solution").Value,
                            Synopsis = r.Element("synopsis") == null ? null : r.Element("synopsis").Value,
                            PluginOutput = r.Element("plugin_output") == null ? null : r.Element("plugin_output").Value,
-                           ComplianceCheckName = r.Element(cm + "cmcompliance-check-name") == null ? null : r.Element(cm + "cmcompliance-check-name").Value,
+                           ComplianceCheckName = r.Element(cm + "compliance-check-name") == null ? null : r.Element(cm + "compliance-check-name").Value,
                            Complianceinfo = r.Element(cm + "compliance-info") == null ? null : r.Element(cm + "compliance-info").Value,
                            ComplianceSeeAlso = r.Element(cm + "compliance-see-also") == null ? null : r.Element(cm + "compliance-see-also").Value,
                            ComplianceSolution = r.Element(cm + "compliance-solution") == null ? null : r.Element(cm + "compliance-solution").Value,
@@ -167,6 +167,7 @@ namespace WebParser
             dvAdditionalScan.Visible = true;
             dvNewScan.Visible = false;
             pnlMessage.Visible = false;
+            lblmessage.Visible = false;
             GetRecords();
         }
 
